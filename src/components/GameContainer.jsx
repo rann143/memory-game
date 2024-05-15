@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
-import PokeCard from '../classes'
+import { useState, useEffect, useMemo } from "react";
 import Card from "./Card";
 import '../styles/component-styles.css'
 
 export default function GameContainer() {
-
+    const [highScore, setHighScore] = useState(0)
     const [pokeData, setPokeData] = useState([]);
     useEffect(() => {
 
@@ -27,6 +26,7 @@ export default function GameContainer() {
                     id: data.id,
                     name: data.name,
                     photoURL: data.sprites.front_default,
+                    // clicked is not from API, I use this for the card game
                     clicked: false
                 }
 
@@ -43,9 +43,10 @@ export default function GameContainer() {
 
             fetch(`https://pokeapi.co/api/v2/pokemon?limit=12`)
                 .then(response => response.json())
-                .then(async function (allpokemon) {
+                .then(async function (allPokemon) {
                     const pokemonDataArray = await Promise.all(
-                        allpokemon.results.map(async (pokemon) => {
+                        // results is an array within the allPokemon JSON object
+                        allPokemon.results.map(async (pokemon) => {
                         const data = await getIndividualData(pokemon)
                         return data
                     })
@@ -64,20 +65,65 @@ export default function GameContainer() {
         
     }, [])
 
-    console.log(pokeData)
+    const clickedArray = pokeData.filter(pokemon =>
+        pokemon.clicked === true
+    )
+
 
     const cardArray = pokeData.map(pokemon => 
         <Card
             card={pokemon}
+            pokeData={pokeData}
+            setPokeData={setPokeData}
+            shuffleArray={shuffleArray}
+            clickedNum={clickedArray.length}
+            highScore={highScore}
+            setHighScore={setHighScore}
             key={pokemon.id}
         />
     )
 
-    console.log(cardArray)
+    function shuffleArray(array) {
+        let copiedArray = [...array]
+        let currentIndex = array.length;
+        
+        // While there remain elements to shuffle...
+        while (currentIndex != 0) {
+
+            // Pick a remaining element...
+            let randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [copiedArray[currentIndex], copiedArray[randomIndex]] = [
+                copiedArray[randomIndex], copiedArray[currentIndex]];
+        }
+
+        setPokeData(copiedArray)
+    }
+
+    function resetGame() {
+        const updatedPokeData = pokeData.map(pokemon => {
+                const updatedPokemon = { ...pokemon, clicked: false }
+                return updatedPokemon
+            })
+
+            shuffleArray(updatedPokeData)
+        
+    }
+
+    console.log(pokeData)
 
     return (
         <>
-            <h1>Memory Game</h1>
+            <h1>Pokémon Memory Game</h1>
+            <button className="reset-btn" onClick={() => resetGame()}>Start New Game</button>
+            <hr />
+            <div className="score-board">
+                <div>Score: {clickedArray.length}</div>
+                <div>High Score: {highScore}
+            </div>
+            </div>
             <div className="grid">
                 {cardArray}
             </div>
