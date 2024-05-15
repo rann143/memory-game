@@ -3,7 +3,7 @@ import '../styles/component-styles.css'
 export default function Card({card, pokeData, setPokeData, shuffleArray, clickedNum, highScore, setHighScore}) {
 
 
-    function endGame() {
+    function lostGame() {
             const updatedPokeData = pokeData.map(pokemon => {
                 const updatedPokemon = { ...pokemon, clicked: false }
                 return updatedPokemon
@@ -27,7 +27,7 @@ export default function Card({card, pokeData, setPokeData, shuffleArray, clicked
             shuffleArray(updatedPokeData);
         } else {
 
-            endGame();
+            lostGame();
            
             
         }

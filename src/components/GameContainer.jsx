@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import Card from "./Card";
 import '../styles/component-styles.css'
+import background from '../assets/thimo-pedersen-dip9IIwUK6w-unsplash.jpg'
 
 export default function GameContainer() {
     const [highScore, setHighScore] = useState(0)
@@ -112,6 +113,12 @@ export default function GameContainer() {
         
     }
 
+    if (clickedArray.length === 12) {
+        setHighScore(12);
+        resetGame();
+        alert("You Win!");
+    }
+
     console.log(pokeData)
 
     return (
@@ -119,14 +126,18 @@ export default function GameContainer() {
             <h1>Pokémon Memory Game</h1>
             <button className="reset-btn" onClick={() => resetGame()}>Start New Game</button>
             <hr />
+            <div className='container' style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', borderRadius: '10px' }}>
             <div className="score-board">
                 <div>Score: {clickedArray.length}</div>
                 <div>High Score: {highScore}
             </div>
             </div>
-            <div className="grid">
+            <div className="grid" >
                 {cardArray}
-            </div>
+                </div>
+                </div>
+            <span className='image-attribute'>Photo by <a href="https://unsplash.com/@thimo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Thimo Pedersen</a> on <a href="https://unsplash.com/photos/red-and-white-ladybug-toy-on-white-and-yellow-book-dip9IIwUK6w?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+  </span>
             
         </>
     )
