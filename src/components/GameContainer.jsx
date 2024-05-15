@@ -113,6 +113,7 @@ export default function GameContainer() {
         
     }
 
+    //HANDLE A WIN
     if (clickedArray.length === 12) {
         setHighScore(12);
         resetGame();
