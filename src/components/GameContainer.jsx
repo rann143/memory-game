@@ -42,7 +42,7 @@ export default function GameContainer() {
 
         function getPokeData() {
 
-            fetch(`https://pokeapi.co/api/v2/pokemon?limit=12`)
+            fetch(`https://pokeapi.co/api/v2/pokemon?limit=21`)
                 .then(response => response.json())
                 .then(async function (allPokemon) {
                     const pokemonDataArray = await Promise.all(
@@ -114,8 +114,8 @@ export default function GameContainer() {
     }
 
     //HANDLE A WIN
-    if (clickedArray.length === 12) {
-        setHighScore(12);
+    if (clickedArray.length === 21) {
+        setHighScore(21);
         resetGame();
         alert("You Win!");
     }
