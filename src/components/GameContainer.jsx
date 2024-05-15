@@ -124,7 +124,7 @@ export default function GameContainer() {
 
     return (
         <>
-            <h1>Pokémon Memory Game</h1>
+            <h1>Memory Game</h1>
             <p>Get points by clicking on an image, but don&apos;t click on any more than once!</p>
             <button className="reset-btn" onClick={() => resetGame()}>Start New Game</button>
             <hr />
