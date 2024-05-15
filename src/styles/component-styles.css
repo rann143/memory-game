@@ -1,0 +1,24 @@
+.grid {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    display: block;
+    background-color: antiquewhite;
+    overflow: hidden;
+    margin: 10px;
+    border-style: none;
+    border-radius: 5px;
+}
+
+img {
+    width: 100%;
+}
+
+h3{
+    margin-top: 0;
+    padding-top: 0;
+}

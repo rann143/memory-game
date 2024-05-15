@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import PokeCard from '../classes'
+import Card from "./Card";
+import '../styles/component-styles.css'
 
 export default function GameContainer() {
-    // const [pokeCards, setPokeCards] = useState(['charizard', 'raichu', 'arbok', 'spearow', 'sandshrew', 'sandslash', 'snorlax', 'poliwrath', 'azurill', 'bastiodon', 'bibarel', 'bidoof']);
-    const [pokeData, setPokeData] = useState([]);
 
+    const [pokeData, setPokeData] = useState([]);
     useEffect(() => {
 
         let isSubscribed = true
@@ -25,7 +26,8 @@ export default function GameContainer() {
                 let cleanedData = {
                     id: data.id,
                     name: data.name,
-                    photoURL: data.sprites.front_default
+                    photoURL: data.sprites.front_default,
+                    clicked: false
                 }
 
                 return cleanedData
@@ -57,12 +59,30 @@ export default function GameContainer() {
         if (isSubscribed) {
             getPokeData()
         }
-
-
-        console.log(pokeData)
         
         return () => isSubscribed = false;
         
-    },[])
+    }, [])
+
+    console.log(pokeData)
+
+    const cardArray = pokeData.map(pokemon => 
+        <Card
+            card={pokemon}
+            key={pokemon.id}
+        />
+    )
+
+    console.log(cardArray)
+
+    return (
+        <>
+            <h1>Memory Game</h1>
+            <div className="grid">
+                {cardArray}
+            </div>
+            
+        </>
+    )
     
 }
