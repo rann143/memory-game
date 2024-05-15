@@ -1,49 +1,68 @@
 import { useState, useEffect } from "react";
+import PokeCard from '../classes'
 
 export default function GameContainer() {
-    const [pokeCards, setPokeCards] = useState(['charizard', 'raichu', 'arbok', 'spearow', 'sandshrew', 'sandslash', 'snorlax', 'poliwrath', 'azurill', 'bastiodon', 'bibarel', 'bidoof']);
-
+    // const [pokeCards, setPokeCards] = useState(['charizard', 'raichu', 'arbok', 'spearow', 'sandshrew', 'sandslash', 'snorlax', 'poliwrath', 'azurill', 'bastiodon', 'bibarel', 'bidoof']);
+    const [pokeData, setPokeData] = useState([]);
 
     useEffect(() => {
-        let ignore = false;
 
-        async function getPokeData(pokemon) {
+        let isSubscribed = true
+
+        async function getIndividualData(pokemon) {
 
             try {
-                let response = await fetch(
-                    `https://pokeapi.co/api/v2/pokemon/${pokemon}/`
-                )
+                let url = pokemon.url;
+
+                let response = await fetch(url)
 
                 if (!response.ok) {
-                    throw new Error("Netwok response was not OK");
+                    throw new Error("Network response was not OK")
                 }
 
                 let data = await response.json();
 
                 let cleanedData = {
+                    id: data.id,
                     name: data.name,
                     photoURL: data.sprites.front_default
                 }
 
-                return cleanedData;
+                return cleanedData
+
             } catch (err) {
-                console.error("There was an error with the fetch operation", err);
+                console.error('Error with fetch operation', err);
                 throw err;
             }
+
         }
 
-        if (!ignore) {
-            console.log(getPokeData('charizard'))
-            
+        function getPokeData() {
+
+            fetch(`https://pokeapi.co/api/v2/pokemon?limit=12`)
+                .then(response => response.json())
+                .then(async function (allpokemon) {
+                    const pokemonDataArray = await Promise.all(
+                        allpokemon.results.map(async (pokemon) => {
+                        const data = await getIndividualData(pokemon)
+                        return data
+                    })
+                    )
+                    return pokemonDataArray
+                })
+                .then(dataArray => setPokeData(dataArray))
+
         }
 
-        return () => ignore = true;
+        if (isSubscribed) {
+            getPokeData()
+        }
 
-    }, [])
 
-
-//     return (
-//     <img src={pokeCards[0].photoURL}  />    
-// )
-
+        console.log(pokeData)
+        
+        return () => isSubscribed = false;
+        
+    },[])
+    
 }

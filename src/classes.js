@@ -1,7 +1,7 @@
 class PokeCard {
-    constructor(uuid, photoURL) {
+    constructor(uuid, name,  photoURL) {
         this.id = uuid,
-        this.name = '',
+        this.name = name,
         this.photoURL = photoURL,
         this.clicked = false
     }
